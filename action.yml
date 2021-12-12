@@ -1,0 +1,66 @@
+name: "upyun-action"
+author: yiyungent
+description: "GitHub Actions for upyun | 又拍云"
+
+
+inputs:
+  # gh_token:
+  #   description: "GitHub access token with Repo scope"
+  #   default: ${{ github.token }}
+  #   required: true
+
+  # repository:
+  #   description: "Your GitHub repository"
+  #   default: ${{ github.repository }}
+  #   required: false
+
+  upyun_username:
+    description: "upyun username"
+    default: ""
+    required: true
+
+  upyun_password:
+    description: "upyun password"
+    default: ""
+    required: true
+
+  upyun_debug:
+    description: "enable debug"
+    default: false
+    required: false
+
+  refresh_cache_urls:
+    description: "Refresh Urls"
+    default: ""
+    required: false
+
+
+outputs:
+  upyun_response:
+    description: "upyun response"
+    value: ${{ steps.docker-upyun-action.outputs.upyun_response }}
+
+
+runs:
+  using: "composite"
+  steps:
+    # 1. The command you want to run. This can be inline or a script in your action repository:
+    # - name: Inline command
+    #   id: inline-command
+    #   # ${{ github.action_path }} or $GITHUB_ACTION_PATH
+    #   run: ${{ github.action_path }}/test/script.sh
+    #   shell: bash
+
+    # References a docker public registry action
+    - name: Docker run
+      id: docker-upyun-action
+      uses: docker://ghcr.io/yiyungent/upyun-action
+      with:
+        upyun_username: ${{ inputs.upyun_username }}
+        upyun_password: ${{ inputs.upyun_password }}
+        upyun_debug: ${{ inputs.upyun_debug }}
+        refresh_cache_urls: ${{ inputs.refresh_cache_urls }}
+
+branding:
+  icon: "cloud"
+  color: "white"

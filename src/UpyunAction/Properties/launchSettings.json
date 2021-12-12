@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "UpyunAction": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
