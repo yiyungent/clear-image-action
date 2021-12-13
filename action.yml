@@ -66,6 +66,15 @@ runs:
         coo cimg --github-action -d --ignore-paths='${{ inputs.ignore_paths }}' ${{ github.action_path }}/${{ inputs.scan_directory }}
       shell: bash
 
+    - name: The content must be escaped to preserve newlines.
+      id: get-pr-body
+      run: |
+        body=${{ steps.run-tool.outputs.image_report }}
+        body="${body//'%'/'%25'}"
+        body="${body//$'\n'/'%0A'}"
+        body="${body//$'\r'/'%0D'}" 
+        echo ::set-output name=body::$body
+
     # Make changes to pull request here
     # https://github.com/peter-evans/create-pull-request
     - name: Create Pull Request
@@ -76,7 +85,7 @@ runs:
         delete-branch: true
         branch-suffix: "short-commit-hash"
         title: '[clear-image-action] Update report'
-        body: ${{ steps.run-tool.outputs.image_report }}
+        body: ${{ steps.get-pr-body.outputs.body }}
         labels: |
           image-report
           automated pr
