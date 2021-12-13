@@ -18,14 +18,13 @@ jobs:
         id: test
         uses: ./ # Uses an action in the root directory
         with:
-          # 在 Settings->Secrets 配置 UPYUN_USERNAME, UPYUN_PASSWORD
-          upyun_username: ${{ secrets.UPYUN_USERNAME }}
-          upyun_password: ${{ secrets.UPYUN_PASSWORD }}
-          # 要刷新的url, 支持匹配符 *, 多个url中间用 \n 隔开
-          refresh_cache_urls: "https://moeci.com/*"
-          upyun_debug: true
+          # 默认为空, 即为仓库根目录
+          scan_directory: "test/coo.Tests/TestData"
+          # 多个路径之间用 英文逗号 , 隔开, 用相对于仓库根目录的 相对路径
+          ignore_paths: "test/coo.Tests/TestData/IgnoreDir1,test/coo.Tests/TestData/IgnoreDir2,test/coo.Tests/TestData/images/1.png"
+          cia_debug: true
 
       # Use the output from the `test` step
-      - name: Get the output upyun_response
-        run: echo "The output was ${{ steps.test.outputs.upyun_response }}"
+      - name: Get the output image_report
+        run: echo "The output was ${{ steps.test.outputs.image_report }}"
 
