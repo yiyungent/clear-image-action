@@ -70,7 +70,7 @@ runs:
     - name: The content must be escaped to preserve newlines.
       id: get-pr-body
       run: |
-        body=${{ steps.run-tool.outputs.image_report }}
+        body="${{ steps.run-tool.outputs.image_report }}"
         body="${body//'%'/'%25'}"
         body="${body//$'\n'/'%0A'}"
         body="${body//$'\r'/'%0D'}" 
