@@ -74,6 +74,7 @@ runs:
         commit-message: Update image report
         branch: clear-image-action/report
         delete-branch: true
+        branch-suffix: "short-commit-hash"
         title: '[clear-image-action] Update report'
         body: ${{ steps.run-tool.outputs.image_report }}
         labels: |
