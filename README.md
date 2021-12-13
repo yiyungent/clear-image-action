@@ -48,6 +48,12 @@ jobs:
 ![](screenshots/1.png)
 
 
+## Related Projects
+
+- [yiyungent/coo: 🧰 .NET 自用CLI, 工具集](https://github.com/yiyungent/coo)    
+  - 本项目 核心依赖
+
+
 ## Donate
 
 clear-image-action is an MIT licensed open source project and completely free to use. However, the amount of effort needed to maintain and develop new features for the project is not sustainable without proper financial backing.
