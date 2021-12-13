@@ -64,7 +64,8 @@ runs:
         export INPUT_CIA_DEBUG=${{ inputs.cia_debug }}
         coo --version
         # coo cimg --github-action -d --ignore-paths='${{ inputs.ignore_paths }}' "F:\Com\me\Repos\notebook\source\_posts"
-        coo cimg --github-action -d --ignore-paths='${{ inputs.ignore_paths }}' ${{ github.action_path }}/${{ inputs.scan_directory }}
+        # 注意: 是 workspace 而不是 action_path, action_path 一定指向 clear-image-action. 而不是 workspace 指向正在使用此action的仓库根目录
+        coo cimg --github-action -d --ignore-paths='${{ inputs.ignore_paths }}' ${{ github.workspace }}/${{ inputs.scan_directory }}
       shell: bash
 
     - name: The content must be escaped to preserve newlines.
