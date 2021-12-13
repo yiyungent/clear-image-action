@@ -71,9 +71,10 @@ runs:
       id: get-pr-body
       run: |
         body="${{ steps.run-tool.outputs.image_report }}"
-        body="${body//'%'/'%25'}"
-        body="${body//$'\n'/'%0A'}"
-        body="${body//$'\r'/'%0D'}" 
+        # ${string//substring/replacement} # 使用$replacement, 代替所有匹配的$substring
+        body="${body//'%'/%25}"
+        body="${body//'\n'/%0A}"
+        body="${body//'\r'/%0D}" 
         echo ::set-output name=body::$body
       shell: bash
 
