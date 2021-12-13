@@ -75,6 +75,7 @@ runs:
         body="${body//$'\n'/'%0A'}"
         body="${body//$'\r'/'%0D'}" 
         echo ::set-output name=body::$body
+      shell: bash
 
     # Make changes to pull request here
     # https://github.com/peter-evans/create-pull-request
