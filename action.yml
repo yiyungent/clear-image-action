@@ -62,6 +62,7 @@ runs:
       id: run-tool
       run: |
         export INPUT_CIA_DEBUG=${{ inputs.cia_debug }}
+        coo --version
         # coo cimg --github-action -d --ignore-paths='${{ inputs.ignore_paths }}' "F:\Com\me\Repos\notebook\source\_posts"
         coo cimg --github-action -d --ignore-paths='${{ inputs.ignore_paths }}' ${{ github.action_path }}/${{ inputs.scan_directory }}
       shell: bash
