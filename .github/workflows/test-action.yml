@@ -2,8 +2,7 @@ name: Test Action
 
 on:
   push:
-    tags:
-      - 'test-action-v*'
+    branches: [main] # 注意更改为你的 branch, 例如 master
 
 jobs:
   build:

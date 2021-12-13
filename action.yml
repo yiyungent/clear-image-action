@@ -23,6 +23,12 @@ inputs:
     description: "ignore paths"
     default: ""
     required: false
+  
+  # TODO: 未使用, 直接使用回到覆盖, 不方便识别默认base分支
+  base:
+    description: "base branch for create-pull-request. | Sets the pull request base branch."
+    default: ""
+    required: false
 
   cia_debug:
     description: "debug for clear-image-action"
