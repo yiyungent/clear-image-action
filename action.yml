@@ -37,9 +37,13 @@ inputs:
 
 
 outputs:
-  image_report:
-    description: "image report"
-    value: ${{ steps.run-tool.outputs.image_report }}
+  image_report_clear:
+    description: "image report: clear"
+    value: ${{ steps.run-tool-cimg.outputs.image_report }}
+
+  image_report_check:
+    description: "image report: check"
+    value: ${{ steps.run-tool-fimg.outputs.image_report }}
 
 
 runs:
@@ -55,23 +59,24 @@ runs:
       # The command you want to run. This can be inline or a script in your action repository:
       # ${{ github.action_path }} or $GITHUB_ACTION_PATH
       # run: ${{ github.action_path }}/test/script.sh
-      run: dotnet tool install -g coo
+      run: | 
+        dotnet tool install -g coo
+        coo --version
       shell: bash
     
-    - name: Run tool
-      id: run-tool
+    - name: Run tool cimg
+      id: run-tool-cimg
       run: |
         export INPUT_CIA_DEBUG=${{ inputs.cia_debug }}
-        coo --version
         # coo cimg --github-action -d --ignore-paths='${{ inputs.ignore_paths }}' "F:\Com\me\Repos\notebook\source\_posts"
         # 注意: 是 workspace 而不是 action_path, action_path 一定指向 clear-image-action. 而不是 workspace 指向正在使用此action的仓库根目录
         coo cimg --github-action -d --ignore-paths='${{ inputs.ignore_paths }}' ${{ github.workspace }}/${{ inputs.scan_directory }}
       shell: bash
 
     - name: The content must be escaped to preserve newlines.
-      id: get-pr-body
+      id: get-pr-body-cimg
       run: |
-        body="${{ steps.run-tool.outputs.image_report }}"
+        body="${{ steps.run-tool-cimg.outputs.image_report }}"
         # ${string//substring/replacement} # 使用$replacement, 代替所有匹配的$substring
         body="${body//'%'/%25}"
         body="${body//'\n'/%0A}"
@@ -84,12 +89,45 @@ runs:
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v3
       with:
-        commit-message: Update image report
-        branch: clear-image-action/report
+        commit-message: "Update image report: clear"
+        branch: clear-image-action/clear-report
         delete-branch: true
         branch-suffix: "short-commit-hash"
-        title: '[clear-image-action] Update report'
-        body: ${{ steps.get-pr-body.outputs.body }}
+        title: '[clear-image-action] Update report: clear'
+        body: ${{ steps.get-pr-body-cimg.outputs.body }}
+        labels: |
+          image-report
+          automated pr
+
+    - name: Run tool fimg
+      id: run-tool-fimg
+      run: |
+        export INPUT_CIA_DEBUG=${{ inputs.cia_debug }}
+        coo fimg --github-action --ignore-paths='${{ inputs.ignore_paths }}' ${{ github.workspace }}/${{ inputs.scan_directory }}
+      shell: bash
+
+    - name: The content must be escaped to preserve newlines.
+      id: get-pr-body-fimg
+      run: |
+        body="${{ steps.run-tool-fimg.outputs.image_report }}"
+        # ${string//substring/replacement} # 使用$replacement, 代替所有匹配的$substring
+        body="${body//'%'/%25}"
+        body="${body//'\n'/%0A}"
+        body="${body//'\r'/%0D}" 
+        echo ::set-output name=body::$body
+      shell: bash
+
+    # Make changes to pull request here
+    # https://github.com/peter-evans/create-pull-request
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v3
+      with:
+        commit-message: "Update image report: check"
+        branch: clear-image-action/check-report
+        delete-branch: true
+        branch-suffix: "short-commit-hash"
+        title: '[clear-image-action] Update report: check'
+        body: ${{ steps.get-pr-body-fimg.outputs.body }}
         labels: |
           image-report
           automated pr

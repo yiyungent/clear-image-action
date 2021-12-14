@@ -25,5 +25,7 @@ jobs:
 
       # Use the output from the `test` step
       - name: Get the output image_report
-        run: echo "The output was ${{ steps.test.outputs.image_report }}"
-
+        run: |
+          echo "The output was ${{ steps.test.outputs.image_report_clear }}"
+          echo "The output was ${{ steps.test.outputs.image_report_check }}"
+        shell: bash
