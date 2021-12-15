@@ -1,19 +1,21 @@
 <h1 align="center">clear-image-action</h1>
 
-> 🔧 Clean up unreferenced images. | 清理未引用图片 | GitHub Actions
+> 🔧 Image detection. | 图片检测 | GitHub Actions
 
 [![repo size](https://img.shields.io/github/repo-size/yiyungent/clear-image-action.svg?style=flat)]()
 [![LICENSE](https://img.shields.io/github/license/yiyungent/clear-image-action.svg?style=flat)](https://github.com/yiyungent/clear-image-action/blob/main/LICENSE)
+[![QQ Group](https://img.shields.io/badge/QQ%20Group-894031109-deepgreen)](https://jq.qq.com/?_wv=1027&k=q5R82fYN)
 
 
 ## 介绍
 
-Clean up unreferenced images. | 清理未引用图片 | GitHub Actions
+使用 `GitHub Action` 自动检测你仓库内 由于误删,图床失效等导致的引用无效,让你第一时间了解丢失了哪些图片;自动清理无用冗余垃圾图片,无需再手动管理图片, 清除无用图片。
 
 ## 功能
 
+- [x] 自动扫描仓库指定文件夹, 发起 `Pull Request`: 图片扫描报告
 - [x] 清理未引用图片
-  - 自动扫描仓库指定文件夹, 发起 `Pull Request`: 图片扫描报告
+  - 以 `Pull Request` 形式发起, 只有你同意合并后, 清理才生效
 - [ ] 检查 引用的图片 是否有效
   - [x] 检查 引用的本地图片 是否存在
   - [ ] 检查 引用的网络图片 是否有效 (200 非 404)
@@ -47,6 +49,10 @@ jobs:
           ignore_paths: ""
 
 ```
+
+## Screenshots
+
+> 部分 `Pull Request` 截图
 
 ![](screenshots/1.png)
 
