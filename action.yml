@@ -121,7 +121,7 @@ runs:
       uses: actions-cool/issues-helper@v2
       with:
         actions: 'create-issue'
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ github.token }} # 注意: 不是 ${{ github.GITHUB_TOKEN }}
         title: '[clear-image-action] Update report: fimg'
         body: ${{ steps.get-pr-body-fimg.outputs.body }}
         labels: |
