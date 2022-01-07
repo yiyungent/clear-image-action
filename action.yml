@@ -74,15 +74,45 @@ runs:
       shell: bash
 
     - name: The content must be escaped to preserve newlines.
-      id: get-pr-body-cimg
+      id: get-body-cimg
       run: |
-        body="${{ steps.run-tool-cimg.outputs.image_report }}"
+        cimg_body="${{ steps.run-tool-cimg.outputs.image_report }}"
         # ${string//substring/replacement} # 使用$replacement, 代替所有匹配的$substring
-        body="${body//'%'/%25}"
-        body="${body//'\n'/%0A}"
-        body="${body//'\r'/%0D}" 
-        echo ::set-output name=body::$body
+        cimg_body="${cimg_body//'%'/%25}"
+        cimg_body="${cimg_body//'\n'/%0A}"
+        cimg_body="${cimg_body//'\r'/%0D}" 
+        echo ::set-output name=cimg_body::$cimg_body
       shell: bash
+
+    - name: Run tool fimg
+      id: run-tool-fimg
+      run: |
+        export INPUT_CIA_DEBUG=${{ inputs.cia_debug }}
+        coo fimg --github-action --ignore-paths='${{ inputs.ignore_paths }}' ${{ github.workspace }}/${{ inputs.scan_directory }}
+      shell: bash
+
+    - name: The content must be escaped to preserve newlines.
+      id: get-body-fimg
+      run: |
+        fimg_body="${{ steps.run-tool-fimg.outputs.image_report }}"
+        # ${string//substring/replacement} # 使用$replacement, 代替所有匹配的$substring
+        fimg_body="${fimg_body//'%'/%25}"
+        fimg_body="${fimg_body//'\n'/%0A}"
+        fimg_body="${fimg_body//'\r'/%0D}" 
+        echo ::set-output name=fimg_body::$fimg_body
+      shell: bash
+
+    # 注意: 最后 先 Create issue 再 Create Pull Request, 防止没有文件变化时, Create Pull Request 失败而中途退出
+
+    - name: Create issue
+      uses: actions-cool/issues-helper@v2
+      with:
+        actions: 'create-issue'
+        token: ${{ github.token }} # 注意: 不是 ${{ github.GITHUB_TOKEN }}
+        title: '[clear-image-action] Update report: fimg'
+        body: ${{ steps.get-body-fimg.outputs.fimg_body }}
+        # 注意:此 action: labels 支持多个，需用逗号隔开
+        labels: 'image-report,automated issue'
 
     # Make changes to pull request here
     # https://github.com/peter-evans/create-pull-request
@@ -94,39 +124,10 @@ runs:
         delete-branch: true
         branch-suffix: "short-commit-hash"
         title: '[clear-image-action] Update report: cimg'
-        body: ${{ steps.get-pr-body-cimg.outputs.body }}
+        body: ${{ steps.get-body-cimg.outputs.cimg_body }}
         labels: |
           image-report
           automated pr
-
-    - name: Run tool fimg
-      id: run-tool-fimg
-      run: |
-        export INPUT_CIA_DEBUG=${{ inputs.cia_debug }}
-        coo fimg --github-action --ignore-paths='${{ inputs.ignore_paths }}' ${{ github.workspace }}/${{ inputs.scan_directory }}
-      shell: bash
-
-    - name: The content must be escaped to preserve newlines.
-      id: get-pr-body-fimg
-      run: |
-        body="${{ steps.run-tool-fimg.outputs.image_report }}"
-        # ${string//substring/replacement} # 使用$replacement, 代替所有匹配的$substring
-        body="${body//'%'/%25}"
-        body="${body//'\n'/%0A}"
-        body="${body//'\r'/%0D}" 
-        echo ::set-output name=body::$body
-      shell: bash
-
-    - name: Create issue
-      uses: actions-cool/issues-helper@v2
-      with:
-        actions: 'create-issue'
-        token: ${{ github.token }} # 注意: 不是 ${{ github.GITHUB_TOKEN }}
-        title: '[clear-image-action] Update report: fimg'
-        body: ${{ steps.get-pr-body-fimg.outputs.body }}
-        labels: |
-          image-report
-          automated issue
 
 
 
