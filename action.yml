@@ -74,6 +74,7 @@ runs:
     - name: Check ustar
       run: | 
         export coo_ustar=${{ steps.run-tool-ustar.outputs.coo_ustar }}
+        sudo chmod +x ${{ github.action_path }}/ustar.sh
         ${{ github.action_path }}/ustar.sh
       shell: bash
     
