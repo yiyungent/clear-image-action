@@ -7,6 +7,8 @@
 [![QQ Group](https://img.shields.io/badge/QQ%20Group-894031109-deepgreen)](https://jq.qq.com/?_wv=1027&k=q5R82fYN)
 
 
+> 注意: 本项目采用 `Star License + MIT License`, 你必须 Star 本项目 才能在你的仓库中运行本 GitHub Action
+
 ## 介绍
 
 使用 `GitHub Action` 自动检测你仓库内 由于误删,图床失效等导致的引用无效,让你第一时间了解丢失了哪些图片;自动清理无用冗余垃圾图片,无需再手动管理图片, 清除无用图片。
