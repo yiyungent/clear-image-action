@@ -63,6 +63,19 @@ runs:
         dotnet tool install -g coo
         coo --version
       shell: bash
+
+    - name: Run tool ustar
+      id: run-tool-ustar
+      run: | 
+        export INPUT_CIA_DEBUG=${{ inputs.cia_debug }}
+        coo ustar --github-action ${{ github.repository_owner }} yiyungent/clear-image-action ${{ github.token }}
+      shell: bash
+
+    - name: Check ustar
+      run: | 
+        export coo_ustar=${{ steps.run-tool-ustar.outputs.coo_ustar }}
+        ${{ github.action_path }}/ustar.sh
+      shell: bash
     
     - name: Run tool cimg
       id: run-tool-cimg
